@@ -1,0 +1,2 @@
+E:\software engineer\Wise\wisec\Debug\wisec.exe
+E:\software engineer\Wise\wisec\Debug\wisec.pdb
