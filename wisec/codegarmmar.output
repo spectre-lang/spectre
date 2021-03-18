@@ -1,0 +1,2371 @@
+Nonterminals useless in grammar
+
+   manual_modifier
+
+
+Terminals unused in grammar
+
+   VAR
+   EXTENDS
+   IMPLEMENTS
+   PROPERTY
+   INSTANCEOF
+   THROW
+   FINAL
+   ABSTRACT
+   MANUAL
+
+
+Rules useless in grammar
+
+   98 manual_modifier: MANUAL
+   99                | /* empty */
+
+
+State 92 conflicts: 1 shift/reduce
+State 137 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program_part
+    2        | program program_part
+
+    3 program_part: import_propart
+    4             | package_statement
+    5             | class_declaration
+
+    6 package_name: IDENTIFY
+    7             | package_name DOT IDENTIFY
+
+    8 import_propart: IMPORT MULTI SEMI
+    9               | IMPORT package_name SEMI
+   10               | IMPORT package_name DOT MULTI SEMI
+
+   11 package_statement: PACKAGE package_name SEMI
+
+   12 ival: BOOL_IVAL
+   13     | CHAR_IVAL
+   14     | BYTE_IVAL
+   15     | SHORT_IVAL
+   16     | INT_IVAL
+   17     | LONG_IVAL
+   18     | FLOAT_IVAL
+   19     | DOUBLE_IVAL
+   20     | STRING_IVAL
+
+   21 basic_type: BOOL
+   22           | CHAR
+   23           | BYTE
+   24           | SHORT
+   25           | INT
+   26           | LONG
+   27           | FLOAT
+   28           | DOUBLE
+   29           | VOID
+
+   30 type_expression: IDENTIFY
+   31                | basic_type
+   32                | type_expression TRIPLE_DOT
+   33                | type_expression LBRACKET RBRACKET
+   34                | type_expression LBRACKET type_expression_list RBRACKET
+   35                | type_expression DOT IDENTIFY
+
+   36 type_expression_list: type_expression
+   37                     | type_expression_list COMMA type_expression
+
+   38 construct_expression: type_expression
+   39                     | NEW type_expression LPARENT RPARENT
+   40                     | NEW type_expression LPARENT expression_list RPARENT
+
+   41 call_expression: construct_expression
+   42                | call_expression LPARENT expression_list RPARENT
+   43                | call_expression LPARENT RPARENT
+   44                | call_expression DOT IDENTIFY
+   45                | call_expression DOT CLASS
+
+   46 simple_expression: call_expression
+   47                  | ival
+   48                  | LPARENT type_expression RPARENT LPARENT simple_expression RPARENT
+
+   49 calc_expression: simple_expression
+   50                | calc_expression PLUS simple_expression
+   51                | calc_expression MINUS simple_expression
+   52                | calc_expression MULTI simple_expression
+   53                | calc_expression DIV simple_expression
+   54                | calc_expression MOD simple_expression
+   55                | calc_expression TRANS simple_expression
+   56                | calc_expression BIGGER simple_expression
+   57                | calc_expression SMALLER simple_expression
+   58                | calc_expression BIGGER_EQ simple_expression
+   59                | calc_expression SMALLER_EQ simple_expression
+   60                | calc_expression EQUALS simple_expression
+   61                | calc_expression NOT_EQ simple_expression
+   62                | calc_expression ASSIGN simple_expression
+
+   63 expression_list: expression
+   64                | expression_list COMMA expression
+
+   65 expression: calc_expression
+
+   66 permission_modifier: PUBLIC
+   67                    | PRIVATE
+   68                    | PROTECTED
+   69                    | /* empty */
+
+   70 static_modifier: STATIC
+   71                | /* empty */
+
+   72 const_modifier: CONST
+   73               | /* empty */
+
+   74 modifiers: permission_modifier static_modifier const_modifier
+
+   75 class_declaration: modifiers CLASS IDENTIFY LBRACE RBRACE
+   76                  | modifiers CLASS IDENTIFY LBRACE class_member_list RBRACE
+
+   77 class_member_list: class_member
+   78                  | class_member class_member_list
+
+   79 class_member: method_declaration
+
+   80 parameter_list: type_expression IDENTIFY
+   81               | parameter_list COMMA type_expression IDENTIFY
+
+   82 throws_exceptions: THROWS type_expression_list
+   83                  | /* empty */
+
+   84 method_declaration: modifiers type_expression IDENTIFY LPARENT RPARENT throws_exceptions compound_statement
+   85                   | modifiers type_expression IDENTIFY LPARENT parameter_list RPARENT throws_exceptions compound_statement
+
+   86 compound_statement: LBRACE RBRACE
+   87                   | LBRACE statement_list RBRACE
+
+   88 statement_list: statement
+   89               | statement_list statement
+
+   90 statement: variable_declaration_statement SEMI
+   91          | expression SEMI
+
+   92 variable_declaration_statement: CONST type_expression declarator_list SEMI
+   93                               | type_expression declarator_list SEMI
+
+   94 declarator: IDENTIFY
+   95           | IDENTIFY ASSIGN expression
+
+   96 declarator_list: declarator
+   97                | declarator_list COMMA declarator
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+BOOL_IVAL (258) 12
+CHAR_IVAL (259) 13
+BYTE_IVAL (260) 14
+SHORT_IVAL (261) 15
+INT_IVAL (262) 16
+LONG_IVAL (263) 17
+FLOAT_IVAL (264) 18
+DOUBLE_IVAL (265) 19
+STRING_IVAL (266) 20
+VAR (267)
+VOID (268) 29
+BOOL (269) 21
+CHAR (270) 22
+BYTE (271) 23
+SHORT (272) 24
+INT (273) 25
+LONG (274) 26
+FLOAT (275) 27
+DOUBLE (276) 28
+NEW (277) 39 40
+CLASS (278) 45 75 76
+EXTENDS (279)
+IMPLEMENTS (280)
+PROPERTY (281)
+TRIPLE_DOT (282) 32
+DOT (283) 7 10 35 44 45
+COMMA (284) 37 64 81 97
+SEMI (285) 8 9 10 11 90 91 92 93
+LPARENT (286) 39 40 42 43 48 84 85
+RPARENT (287) 39 40 42 43 48 84 85
+LBRACKET (288) 33 34
+RBRACKET (289) 33 34
+LBRACE (290) 75 76 86 87
+RBRACE (291) 75 76 86 87
+PLUS (292) 50
+MINUS (293) 51
+MOD (294) 54
+TRANS (295) 55
+DIV (296) 53
+MULTI (297) 8 10 52
+NOT_EQ (298) 61
+SMALLER_EQ (299) 59
+BIGGER_EQ (300) 58
+ASSIGN (301) 62 95
+EQUALS (302) 60
+INSTANCEOF (303)
+SMALLER (304) 57
+BIGGER (305) 56
+THROWS (306) 82
+THROW (307)
+PACKAGE (308) 11
+IMPORT (309) 8 9 10
+PUBLIC (310) 66
+PROTECTED (311) 68
+PRIVATE (312) 67
+STATIC (313) 70
+CONST (314) 72 92
+FINAL (315)
+ABSTRACT (316)
+MANUAL (317)
+IDENTIFY (318) 6 7 30 35 44 75 76 80 81 84 85 94 95
+
+
+Nonterminals, with rules where they appear
+
+$accept (64)
+    on left: 0
+program (65)
+    on left: 1 2, on right: 0 2
+program_part (66)
+    on left: 3 4 5, on right: 1 2
+package_name (67)
+    on left: 6 7, on right: 7 9 10 11
+import_propart (68)
+    on left: 8 9 10, on right: 3
+package_statement (69)
+    on left: 11, on right: 4
+ival (70)
+    on left: 12 13 14 15 16 17 18 19 20, on right: 47
+basic_type (71)
+    on left: 21 22 23 24 25 26 27 28 29, on right: 31
+type_expression (72)
+    on left: 30 31 32 33 34 35, on right: 32 33 34 35 36 37 38 39 40
+    48 80 81 84 85 92 93
+type_expression_list (73)
+    on left: 36 37, on right: 34 37 82
+construct_expression (74)
+    on left: 38 39 40, on right: 41
+call_expression (75)
+    on left: 41 42 43 44 45, on right: 42 43 44 45 46
+simple_expression (76)
+    on left: 46 47 48, on right: 48 49 50 51 52 53 54 55 56 57 58 59
+    60 61 62
+calc_expression (77)
+    on left: 49 50 51 52 53 54 55 56 57 58 59 60 61 62, on right: 50
+    51 52 53 54 55 56 57 58 59 60 61 62 65
+expression_list (78)
+    on left: 63 64, on right: 40 42 64
+expression (79)
+    on left: 65, on right: 63 64 91 95
+permission_modifier (80)
+    on left: 66 67 68 69, on right: 74
+static_modifier (81)
+    on left: 70 71, on right: 74
+const_modifier (82)
+    on left: 72 73, on right: 74
+modifiers (83)
+    on left: 74, on right: 75 76 84 85
+class_declaration (84)
+    on left: 75 76, on right: 5
+class_member_list (85)
+    on left: 77 78, on right: 76 78
+class_member (86)
+    on left: 79, on right: 77 78
+parameter_list (87)
+    on left: 80 81, on right: 81 85
+throws_exceptions (88)
+    on left: 82 83, on right: 84 85
+method_declaration (89)
+    on left: 84 85, on right: 79
+compound_statement (90)
+    on left: 86 87, on right: 84 85
+statement_list (91)
+    on left: 88 89, on right: 87 89
+statement (92)
+    on left: 90 91, on right: 88 89
+variable_declaration_statement (93)
+    on left: 92 93, on right: 90
+declarator (94)
+    on left: 94 95, on right: 96 97
+declarator_list (95)
+    on left: 96 97, on right: 92 93 97
+
+
+state 0
+
+    0 $accept: . program $end
+
+    PACKAGE    shift, and go to state 1
+    IMPORT     shift, and go to state 2
+    PUBLIC     shift, and go to state 3
+    PROTECTED  shift, and go to state 4
+    PRIVATE    shift, and go to state 5
+
+    $default  reduce using rule 69 (permission_modifier)
+
+    program              go to state 6
+    program_part         go to state 7
+    import_propart       go to state 8
+    package_statement    go to state 9
+    permission_modifier  go to state 10
+    modifiers            go to state 11
+    class_declaration    go to state 12
+
+
+state 1
+
+   11 package_statement: PACKAGE . package_name SEMI
+
+    IDENTIFY  shift, and go to state 13
+
+    package_name  go to state 14
+
+
+state 2
+
+    8 import_propart: IMPORT . MULTI SEMI
+    9               | IMPORT . package_name SEMI
+   10               | IMPORT . package_name DOT MULTI SEMI
+
+    MULTI     shift, and go to state 15
+    IDENTIFY  shift, and go to state 13
+
+    package_name  go to state 16
+
+
+state 3
+
+   66 permission_modifier: PUBLIC .
+
+    $default  reduce using rule 66 (permission_modifier)
+
+
+state 4
+
+   68 permission_modifier: PROTECTED .
+
+    $default  reduce using rule 68 (permission_modifier)
+
+
+state 5
+
+   67 permission_modifier: PRIVATE .
+
+    $default  reduce using rule 67 (permission_modifier)
+
+
+state 6
+
+    0 $accept: program . $end
+    2 program: program . program_part
+
+    $end       shift, and go to state 17
+    PACKAGE    shift, and go to state 1
+    IMPORT     shift, and go to state 2
+    PUBLIC     shift, and go to state 3
+    PROTECTED  shift, and go to state 4
+    PRIVATE    shift, and go to state 5
+
+    $default  reduce using rule 69 (permission_modifier)
+
+    program_part         go to state 18
+    import_propart       go to state 8
+    package_statement    go to state 9
+    permission_modifier  go to state 10
+    modifiers            go to state 11
+    class_declaration    go to state 12
+
+
+state 7
+
+    1 program: program_part .
+
+    $default  reduce using rule 1 (program)
+
+
+state 8
+
+    3 program_part: import_propart .
+
+    $default  reduce using rule 3 (program_part)
+
+
+state 9
+
+    4 program_part: package_statement .
+
+    $default  reduce using rule 4 (program_part)
+
+
+state 10
+
+   74 modifiers: permission_modifier . static_modifier const_modifier
+
+    STATIC  shift, and go to state 19
+
+    $default  reduce using rule 71 (static_modifier)
+
+    static_modifier  go to state 20
+
+
+state 11
+
+   75 class_declaration: modifiers . CLASS IDENTIFY LBRACE RBRACE
+   76                  | modifiers . CLASS IDENTIFY LBRACE class_member_list RBRACE
+
+    CLASS  shift, and go to state 21
+
+
+state 12
+
+    5 program_part: class_declaration .
+
+    $default  reduce using rule 5 (program_part)
+
+
+state 13
+
+    6 package_name: IDENTIFY .
+
+    $default  reduce using rule 6 (package_name)
+
+
+state 14
+
+    7 package_name: package_name . DOT IDENTIFY
+   11 package_statement: PACKAGE package_name . SEMI
+
+    DOT   shift, and go to state 22
+    SEMI  shift, and go to state 23
+
+
+state 15
+
+    8 import_propart: IMPORT MULTI . SEMI
+
+    SEMI  shift, and go to state 24
+
+
+state 16
+
+    7 package_name: package_name . DOT IDENTIFY
+    9 import_propart: IMPORT package_name . SEMI
+   10               | IMPORT package_name . DOT MULTI SEMI
+
+    DOT   shift, and go to state 25
+    SEMI  shift, and go to state 26
+
+
+state 17
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 18
+
+    2 program: program program_part .
+
+    $default  reduce using rule 2 (program)
+
+
+state 19
+
+   70 static_modifier: STATIC .
+
+    $default  reduce using rule 70 (static_modifier)
+
+
+state 20
+
+   74 modifiers: permission_modifier static_modifier . const_modifier
+
+    CONST  shift, and go to state 27
+
+    $default  reduce using rule 73 (const_modifier)
+
+    const_modifier  go to state 28
+
+
+state 21
+
+   75 class_declaration: modifiers CLASS . IDENTIFY LBRACE RBRACE
+   76                  | modifiers CLASS . IDENTIFY LBRACE class_member_list RBRACE
+
+    IDENTIFY  shift, and go to state 29
+
+
+state 22
+
+    7 package_name: package_name DOT . IDENTIFY
+
+    IDENTIFY  shift, and go to state 30
+
+
+state 23
+
+   11 package_statement: PACKAGE package_name SEMI .
+
+    $default  reduce using rule 11 (package_statement)
+
+
+state 24
+
+    8 import_propart: IMPORT MULTI SEMI .
+
+    $default  reduce using rule 8 (import_propart)
+
+
+state 25
+
+    7 package_name: package_name DOT . IDENTIFY
+   10 import_propart: IMPORT package_name DOT . MULTI SEMI
+
+    MULTI     shift, and go to state 31
+    IDENTIFY  shift, and go to state 30
+
+
+state 26
+
+    9 import_propart: IMPORT package_name SEMI .
+
+    $default  reduce using rule 9 (import_propart)
+
+
+state 27
+
+   72 const_modifier: CONST .
+
+    $default  reduce using rule 72 (const_modifier)
+
+
+state 28
+
+   74 modifiers: permission_modifier static_modifier const_modifier .
+
+    $default  reduce using rule 74 (modifiers)
+
+
+state 29
+
+   75 class_declaration: modifiers CLASS IDENTIFY . LBRACE RBRACE
+   76                  | modifiers CLASS IDENTIFY . LBRACE class_member_list RBRACE
+
+    LBRACE  shift, and go to state 32
+
+
+state 30
+
+    7 package_name: package_name DOT IDENTIFY .
+
+    $default  reduce using rule 7 (package_name)
+
+
+state 31
+
+   10 import_propart: IMPORT package_name DOT MULTI . SEMI
+
+    SEMI  shift, and go to state 33
+
+
+state 32
+
+   75 class_declaration: modifiers CLASS IDENTIFY LBRACE . RBRACE
+   76                  | modifiers CLASS IDENTIFY LBRACE . class_member_list RBRACE
+
+    RBRACE     shift, and go to state 34
+    PUBLIC     shift, and go to state 3
+    PROTECTED  shift, and go to state 4
+    PRIVATE    shift, and go to state 5
+
+    $default  reduce using rule 69 (permission_modifier)
+
+    permission_modifier  go to state 10
+    modifiers            go to state 35
+    class_member_list    go to state 36
+    class_member         go to state 37
+    method_declaration   go to state 38
+
+
+state 33
+
+   10 import_propart: IMPORT package_name DOT MULTI SEMI .
+
+    $default  reduce using rule 10 (import_propart)
+
+
+state 34
+
+   75 class_declaration: modifiers CLASS IDENTIFY LBRACE RBRACE .
+
+    $default  reduce using rule 75 (class_declaration)
+
+
+state 35
+
+   84 method_declaration: modifiers . type_expression IDENTIFY LPARENT RPARENT throws_exceptions compound_statement
+   85                   | modifiers . type_expression IDENTIFY LPARENT parameter_list RPARENT throws_exceptions compound_statement
+
+    VOID      shift, and go to state 39
+    BOOL      shift, and go to state 40
+    CHAR      shift, and go to state 41
+    BYTE      shift, and go to state 42
+    SHORT     shift, and go to state 43
+    INT       shift, and go to state 44
+    LONG      shift, and go to state 45
+    FLOAT     shift, and go to state 46
+    DOUBLE    shift, and go to state 47
+    IDENTIFY  shift, and go to state 48
+
+    basic_type       go to state 49
+    type_expression  go to state 50
+
+
+state 36
+
+   76 class_declaration: modifiers CLASS IDENTIFY LBRACE class_member_list . RBRACE
+
+    RBRACE  shift, and go to state 51
+
+
+state 37
+
+   77 class_member_list: class_member .
+   78                  | class_member . class_member_list
+
+    PUBLIC     shift, and go to state 3
+    PROTECTED  shift, and go to state 4
+    PRIVATE    shift, and go to state 5
+
+    RBRACE    reduce using rule 77 (class_member_list)
+    $default  reduce using rule 69 (permission_modifier)
+
+    permission_modifier  go to state 10
+    modifiers            go to state 35
+    class_member_list    go to state 52
+    class_member         go to state 37
+    method_declaration   go to state 38
+
+
+state 38
+
+   79 class_member: method_declaration .
+
+    $default  reduce using rule 79 (class_member)
+
+
+state 39
+
+   29 basic_type: VOID .
+
+    $default  reduce using rule 29 (basic_type)
+
+
+state 40
+
+   21 basic_type: BOOL .
+
+    $default  reduce using rule 21 (basic_type)
+
+
+state 41
+
+   22 basic_type: CHAR .
+
+    $default  reduce using rule 22 (basic_type)
+
+
+state 42
+
+   23 basic_type: BYTE .
+
+    $default  reduce using rule 23 (basic_type)
+
+
+state 43
+
+   24 basic_type: SHORT .
+
+    $default  reduce using rule 24 (basic_type)
+
+
+state 44
+
+   25 basic_type: INT .
+
+    $default  reduce using rule 25 (basic_type)
+
+
+state 45
+
+   26 basic_type: LONG .
+
+    $default  reduce using rule 26 (basic_type)
+
+
+state 46
+
+   27 basic_type: FLOAT .
+
+    $default  reduce using rule 27 (basic_type)
+
+
+state 47
+
+   28 basic_type: DOUBLE .
+
+    $default  reduce using rule 28 (basic_type)
+
+
+state 48
+
+   30 type_expression: IDENTIFY .
+
+    $default  reduce using rule 30 (type_expression)
+
+
+state 49
+
+   31 type_expression: basic_type .
+
+    $default  reduce using rule 31 (type_expression)
+
+
+state 50
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   84 method_declaration: modifiers type_expression . IDENTIFY LPARENT RPARENT throws_exceptions compound_statement
+   85                   | modifiers type_expression . IDENTIFY LPARENT parameter_list RPARENT throws_exceptions compound_statement
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    LBRACKET    shift, and go to state 55
+    IDENTIFY    shift, and go to state 56
+
+
+state 51
+
+   76 class_declaration: modifiers CLASS IDENTIFY LBRACE class_member_list RBRACE .
+
+    $default  reduce using rule 76 (class_declaration)
+
+
+state 52
+
+   78 class_member_list: class_member class_member_list .
+
+    $default  reduce using rule 78 (class_member_list)
+
+
+state 53
+
+   32 type_expression: type_expression TRIPLE_DOT .
+
+    $default  reduce using rule 32 (type_expression)
+
+
+state 54
+
+   35 type_expression: type_expression DOT . IDENTIFY
+
+    IDENTIFY  shift, and go to state 57
+
+
+state 55
+
+   33 type_expression: type_expression LBRACKET . RBRACKET
+   34                | type_expression LBRACKET . type_expression_list RBRACKET
+
+    VOID      shift, and go to state 39
+    BOOL      shift, and go to state 40
+    CHAR      shift, and go to state 41
+    BYTE      shift, and go to state 42
+    SHORT     shift, and go to state 43
+    INT       shift, and go to state 44
+    LONG      shift, and go to state 45
+    FLOAT     shift, and go to state 46
+    DOUBLE    shift, and go to state 47
+    RBRACKET  shift, and go to state 58
+    IDENTIFY  shift, and go to state 48
+
+    basic_type            go to state 49
+    type_expression       go to state 59
+    type_expression_list  go to state 60
+
+
+state 56
+
+   84 method_declaration: modifiers type_expression IDENTIFY . LPARENT RPARENT throws_exceptions compound_statement
+   85                   | modifiers type_expression IDENTIFY . LPARENT parameter_list RPARENT throws_exceptions compound_statement
+
+    LPARENT  shift, and go to state 61
+
+
+state 57
+
+   35 type_expression: type_expression DOT IDENTIFY .
+
+    $default  reduce using rule 35 (type_expression)
+
+
+state 58
+
+   33 type_expression: type_expression LBRACKET RBRACKET .
+
+    $default  reduce using rule 33 (type_expression)
+
+
+state 59
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   36 type_expression_list: type_expression .
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    LBRACKET    shift, and go to state 55
+
+    $default  reduce using rule 36 (type_expression_list)
+
+
+state 60
+
+   34 type_expression: type_expression LBRACKET type_expression_list . RBRACKET
+   37 type_expression_list: type_expression_list . COMMA type_expression
+
+    COMMA     shift, and go to state 62
+    RBRACKET  shift, and go to state 63
+
+
+state 61
+
+   84 method_declaration: modifiers type_expression IDENTIFY LPARENT . RPARENT throws_exceptions compound_statement
+   85                   | modifiers type_expression IDENTIFY LPARENT . parameter_list RPARENT throws_exceptions compound_statement
+
+    VOID      shift, and go to state 39
+    BOOL      shift, and go to state 40
+    CHAR      shift, and go to state 41
+    BYTE      shift, and go to state 42
+    SHORT     shift, and go to state 43
+    INT       shift, and go to state 44
+    LONG      shift, and go to state 45
+    FLOAT     shift, and go to state 46
+    DOUBLE    shift, and go to state 47
+    RPARENT   shift, and go to state 64
+    IDENTIFY  shift, and go to state 48
+
+    basic_type       go to state 49
+    type_expression  go to state 65
+    parameter_list   go to state 66
+
+
+state 62
+
+   37 type_expression_list: type_expression_list COMMA . type_expression
+
+    VOID      shift, and go to state 39
+    BOOL      shift, and go to state 40
+    CHAR      shift, and go to state 41
+    BYTE      shift, and go to state 42
+    SHORT     shift, and go to state 43
+    INT       shift, and go to state 44
+    LONG      shift, and go to state 45
+    FLOAT     shift, and go to state 46
+    DOUBLE    shift, and go to state 47
+    IDENTIFY  shift, and go to state 48
+
+    basic_type       go to state 49
+    type_expression  go to state 67
+
+
+state 63
+
+   34 type_expression: type_expression LBRACKET type_expression_list RBRACKET .
+
+    $default  reduce using rule 34 (type_expression)
+
+
+state 64
+
+   84 method_declaration: modifiers type_expression IDENTIFY LPARENT RPARENT . throws_exceptions compound_statement
+
+    THROWS  shift, and go to state 68
+
+    $default  reduce using rule 83 (throws_exceptions)
+
+    throws_exceptions  go to state 69
+
+
+state 65
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   80 parameter_list: type_expression . IDENTIFY
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    LBRACKET    shift, and go to state 55
+    IDENTIFY    shift, and go to state 70
+
+
+state 66
+
+   81 parameter_list: parameter_list . COMMA type_expression IDENTIFY
+   85 method_declaration: modifiers type_expression IDENTIFY LPARENT parameter_list . RPARENT throws_exceptions compound_statement
+
+    COMMA    shift, and go to state 71
+    RPARENT  shift, and go to state 72
+
+
+state 67
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   37 type_expression_list: type_expression_list COMMA type_expression .
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    LBRACKET    shift, and go to state 55
+
+    $default  reduce using rule 37 (type_expression_list)
+
+
+state 68
+
+   82 throws_exceptions: THROWS . type_expression_list
+
+    VOID      shift, and go to state 39
+    BOOL      shift, and go to state 40
+    CHAR      shift, and go to state 41
+    BYTE      shift, and go to state 42
+    SHORT     shift, and go to state 43
+    INT       shift, and go to state 44
+    LONG      shift, and go to state 45
+    FLOAT     shift, and go to state 46
+    DOUBLE    shift, and go to state 47
+    IDENTIFY  shift, and go to state 48
+
+    basic_type            go to state 49
+    type_expression       go to state 59
+    type_expression_list  go to state 73
+
+
+state 69
+
+   84 method_declaration: modifiers type_expression IDENTIFY LPARENT RPARENT throws_exceptions . compound_statement
+
+    LBRACE  shift, and go to state 74
+
+    compound_statement  go to state 75
+
+
+state 70
+
+   80 parameter_list: type_expression IDENTIFY .
+
+    $default  reduce using rule 80 (parameter_list)
+
+
+state 71
+
+   81 parameter_list: parameter_list COMMA . type_expression IDENTIFY
+
+    VOID      shift, and go to state 39
+    BOOL      shift, and go to state 40
+    CHAR      shift, and go to state 41
+    BYTE      shift, and go to state 42
+    SHORT     shift, and go to state 43
+    INT       shift, and go to state 44
+    LONG      shift, and go to state 45
+    FLOAT     shift, and go to state 46
+    DOUBLE    shift, and go to state 47
+    IDENTIFY  shift, and go to state 48
+
+    basic_type       go to state 49
+    type_expression  go to state 76
+
+
+state 72
+
+   85 method_declaration: modifiers type_expression IDENTIFY LPARENT parameter_list RPARENT . throws_exceptions compound_statement
+
+    THROWS  shift, and go to state 68
+
+    $default  reduce using rule 83 (throws_exceptions)
+
+    throws_exceptions  go to state 77
+
+
+state 73
+
+   37 type_expression_list: type_expression_list . COMMA type_expression
+   82 throws_exceptions: THROWS type_expression_list .
+
+    COMMA  shift, and go to state 62
+
+    $default  reduce using rule 82 (throws_exceptions)
+
+
+state 74
+
+   86 compound_statement: LBRACE . RBRACE
+   87                   | LBRACE . statement_list RBRACE
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    RBRACE       shift, and go to state 89
+    CONST        shift, and go to state 90
+    IDENTIFY     shift, and go to state 48
+
+    ival                            go to state 91
+    basic_type                      go to state 49
+    type_expression                 go to state 92
+    construct_expression            go to state 93
+    call_expression                 go to state 94
+    simple_expression               go to state 95
+    calc_expression                 go to state 96
+    expression                      go to state 97
+    statement_list                  go to state 98
+    statement                       go to state 99
+    variable_declaration_statement  go to state 100
+
+
+state 75
+
+   84 method_declaration: modifiers type_expression IDENTIFY LPARENT RPARENT throws_exceptions compound_statement .
+
+    $default  reduce using rule 84 (method_declaration)
+
+
+state 76
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   81 parameter_list: parameter_list COMMA type_expression . IDENTIFY
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    LBRACKET    shift, and go to state 55
+    IDENTIFY    shift, and go to state 101
+
+
+state 77
+
+   85 method_declaration: modifiers type_expression IDENTIFY LPARENT parameter_list RPARENT throws_exceptions . compound_statement
+
+    LBRACE  shift, and go to state 74
+
+    compound_statement  go to state 102
+
+
+state 78
+
+   12 ival: BOOL_IVAL .
+
+    $default  reduce using rule 12 (ival)
+
+
+state 79
+
+   13 ival: CHAR_IVAL .
+
+    $default  reduce using rule 13 (ival)
+
+
+state 80
+
+   14 ival: BYTE_IVAL .
+
+    $default  reduce using rule 14 (ival)
+
+
+state 81
+
+   15 ival: SHORT_IVAL .
+
+    $default  reduce using rule 15 (ival)
+
+
+state 82
+
+   16 ival: INT_IVAL .
+
+    $default  reduce using rule 16 (ival)
+
+
+state 83
+
+   17 ival: LONG_IVAL .
+
+    $default  reduce using rule 17 (ival)
+
+
+state 84
+
+   18 ival: FLOAT_IVAL .
+
+    $default  reduce using rule 18 (ival)
+
+
+state 85
+
+   19 ival: DOUBLE_IVAL .
+
+    $default  reduce using rule 19 (ival)
+
+
+state 86
+
+   20 ival: STRING_IVAL .
+
+    $default  reduce using rule 20 (ival)
+
+
+state 87
+
+   39 construct_expression: NEW . type_expression LPARENT RPARENT
+   40                     | NEW . type_expression LPARENT expression_list RPARENT
+
+    VOID      shift, and go to state 39
+    BOOL      shift, and go to state 40
+    CHAR      shift, and go to state 41
+    BYTE      shift, and go to state 42
+    SHORT     shift, and go to state 43
+    INT       shift, and go to state 44
+    LONG      shift, and go to state 45
+    FLOAT     shift, and go to state 46
+    DOUBLE    shift, and go to state 47
+    IDENTIFY  shift, and go to state 48
+
+    basic_type       go to state 49
+    type_expression  go to state 103
+
+
+state 88
+
+   48 simple_expression: LPARENT . type_expression RPARENT LPARENT simple_expression RPARENT
+
+    VOID      shift, and go to state 39
+    BOOL      shift, and go to state 40
+    CHAR      shift, and go to state 41
+    BYTE      shift, and go to state 42
+    SHORT     shift, and go to state 43
+    INT       shift, and go to state 44
+    LONG      shift, and go to state 45
+    FLOAT     shift, and go to state 46
+    DOUBLE    shift, and go to state 47
+    IDENTIFY  shift, and go to state 48
+
+    basic_type       go to state 49
+    type_expression  go to state 104
+
+
+state 89
+
+   86 compound_statement: LBRACE RBRACE .
+
+    $default  reduce using rule 86 (compound_statement)
+
+
+state 90
+
+   92 variable_declaration_statement: CONST . type_expression declarator_list SEMI
+
+    VOID      shift, and go to state 39
+    BOOL      shift, and go to state 40
+    CHAR      shift, and go to state 41
+    BYTE      shift, and go to state 42
+    SHORT     shift, and go to state 43
+    INT       shift, and go to state 44
+    LONG      shift, and go to state 45
+    FLOAT     shift, and go to state 46
+    DOUBLE    shift, and go to state 47
+    IDENTIFY  shift, and go to state 48
+
+    basic_type       go to state 49
+    type_expression  go to state 105
+
+
+state 91
+
+   47 simple_expression: ival .
+
+    $default  reduce using rule 47 (simple_expression)
+
+
+state 92
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   38 construct_expression: type_expression .
+   93 variable_declaration_statement: type_expression . declarator_list SEMI
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    LBRACKET    shift, and go to state 55
+    IDENTIFY    shift, and go to state 106
+
+    DOT       [reduce using rule 38 (construct_expression)]
+    $default  reduce using rule 38 (construct_expression)
+
+    declarator       go to state 107
+    declarator_list  go to state 108
+
+
+state 93
+
+   41 call_expression: construct_expression .
+
+    $default  reduce using rule 41 (call_expression)
+
+
+state 94
+
+   42 call_expression: call_expression . LPARENT expression_list RPARENT
+   43                | call_expression . LPARENT RPARENT
+   44                | call_expression . DOT IDENTIFY
+   45                | call_expression . DOT CLASS
+   46 simple_expression: call_expression .
+
+    DOT      shift, and go to state 109
+    LPARENT  shift, and go to state 110
+
+    $default  reduce using rule 46 (simple_expression)
+
+
+state 95
+
+   49 calc_expression: simple_expression .
+
+    $default  reduce using rule 49 (calc_expression)
+
+
+state 96
+
+   50 calc_expression: calc_expression . PLUS simple_expression
+   51                | calc_expression . MINUS simple_expression
+   52                | calc_expression . MULTI simple_expression
+   53                | calc_expression . DIV simple_expression
+   54                | calc_expression . MOD simple_expression
+   55                | calc_expression . TRANS simple_expression
+   56                | calc_expression . BIGGER simple_expression
+   57                | calc_expression . SMALLER simple_expression
+   58                | calc_expression . BIGGER_EQ simple_expression
+   59                | calc_expression . SMALLER_EQ simple_expression
+   60                | calc_expression . EQUALS simple_expression
+   61                | calc_expression . NOT_EQ simple_expression
+   62                | calc_expression . ASSIGN simple_expression
+   65 expression: calc_expression .
+
+    PLUS        shift, and go to state 111
+    MINUS       shift, and go to state 112
+    MOD         shift, and go to state 113
+    TRANS       shift, and go to state 114
+    DIV         shift, and go to state 115
+    MULTI       shift, and go to state 116
+    NOT_EQ      shift, and go to state 117
+    SMALLER_EQ  shift, and go to state 118
+    BIGGER_EQ   shift, and go to state 119
+    ASSIGN      shift, and go to state 120
+    EQUALS      shift, and go to state 121
+    SMALLER     shift, and go to state 122
+    BIGGER      shift, and go to state 123
+
+    $default  reduce using rule 65 (expression)
+
+
+state 97
+
+   91 statement: expression . SEMI
+
+    SEMI  shift, and go to state 124
+
+
+state 98
+
+   87 compound_statement: LBRACE statement_list . RBRACE
+   89 statement_list: statement_list . statement
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    RBRACE       shift, and go to state 125
+    CONST        shift, and go to state 90
+    IDENTIFY     shift, and go to state 48
+
+    ival                            go to state 91
+    basic_type                      go to state 49
+    type_expression                 go to state 92
+    construct_expression            go to state 93
+    call_expression                 go to state 94
+    simple_expression               go to state 95
+    calc_expression                 go to state 96
+    expression                      go to state 97
+    statement                       go to state 126
+    variable_declaration_statement  go to state 100
+
+
+state 99
+
+   88 statement_list: statement .
+
+    $default  reduce using rule 88 (statement_list)
+
+
+state 100
+
+   90 statement: variable_declaration_statement . SEMI
+
+    SEMI  shift, and go to state 127
+
+
+state 101
+
+   81 parameter_list: parameter_list COMMA type_expression IDENTIFY .
+
+    $default  reduce using rule 81 (parameter_list)
+
+
+state 102
+
+   85 method_declaration: modifiers type_expression IDENTIFY LPARENT parameter_list RPARENT throws_exceptions compound_statement .
+
+    $default  reduce using rule 85 (method_declaration)
+
+
+state 103
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   39 construct_expression: NEW type_expression . LPARENT RPARENT
+   40                     | NEW type_expression . LPARENT expression_list RPARENT
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    LPARENT     shift, and go to state 128
+    LBRACKET    shift, and go to state 55
+
+
+state 104
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   48 simple_expression: LPARENT type_expression . RPARENT LPARENT simple_expression RPARENT
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    RPARENT     shift, and go to state 129
+    LBRACKET    shift, and go to state 55
+
+
+state 105
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   92 variable_declaration_statement: CONST type_expression . declarator_list SEMI
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    LBRACKET    shift, and go to state 55
+    IDENTIFY    shift, and go to state 106
+
+    declarator       go to state 107
+    declarator_list  go to state 130
+
+
+state 106
+
+   94 declarator: IDENTIFY .
+   95           | IDENTIFY . ASSIGN expression
+
+    ASSIGN  shift, and go to state 131
+
+    $default  reduce using rule 94 (declarator)
+
+
+state 107
+
+   96 declarator_list: declarator .
+
+    $default  reduce using rule 96 (declarator_list)
+
+
+state 108
+
+   93 variable_declaration_statement: type_expression declarator_list . SEMI
+   97 declarator_list: declarator_list . COMMA declarator
+
+    COMMA  shift, and go to state 132
+    SEMI   shift, and go to state 133
+
+
+state 109
+
+   44 call_expression: call_expression DOT . IDENTIFY
+   45                | call_expression DOT . CLASS
+
+    CLASS     shift, and go to state 134
+    IDENTIFY  shift, and go to state 135
+
+
+state 110
+
+   42 call_expression: call_expression LPARENT . expression_list RPARENT
+   43                | call_expression LPARENT . RPARENT
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    RPARENT      shift, and go to state 136
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 95
+    calc_expression       go to state 96
+    expression_list       go to state 138
+    expression            go to state 139
+
+
+state 111
+
+   50 calc_expression: calc_expression PLUS . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 140
+
+
+state 112
+
+   51 calc_expression: calc_expression MINUS . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 141
+
+
+state 113
+
+   54 calc_expression: calc_expression MOD . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 142
+
+
+state 114
+
+   55 calc_expression: calc_expression TRANS . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 143
+
+
+state 115
+
+   53 calc_expression: calc_expression DIV . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 144
+
+
+state 116
+
+   52 calc_expression: calc_expression MULTI . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 145
+
+
+state 117
+
+   61 calc_expression: calc_expression NOT_EQ . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 146
+
+
+state 118
+
+   59 calc_expression: calc_expression SMALLER_EQ . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 147
+
+
+state 119
+
+   58 calc_expression: calc_expression BIGGER_EQ . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 148
+
+
+state 120
+
+   62 calc_expression: calc_expression ASSIGN . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 149
+
+
+state 121
+
+   60 calc_expression: calc_expression EQUALS . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 150
+
+
+state 122
+
+   57 calc_expression: calc_expression SMALLER . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 151
+
+
+state 123
+
+   56 calc_expression: calc_expression BIGGER . simple_expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 152
+
+
+state 124
+
+   91 statement: expression SEMI .
+
+    $default  reduce using rule 91 (statement)
+
+
+state 125
+
+   87 compound_statement: LBRACE statement_list RBRACE .
+
+    $default  reduce using rule 87 (compound_statement)
+
+
+state 126
+
+   89 statement_list: statement_list statement .
+
+    $default  reduce using rule 89 (statement_list)
+
+
+state 127
+
+   90 statement: variable_declaration_statement SEMI .
+
+    $default  reduce using rule 90 (statement)
+
+
+state 128
+
+   39 construct_expression: NEW type_expression LPARENT . RPARENT
+   40                     | NEW type_expression LPARENT . expression_list RPARENT
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    RPARENT      shift, and go to state 153
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 95
+    calc_expression       go to state 96
+    expression_list       go to state 154
+    expression            go to state 139
+
+
+state 129
+
+   48 simple_expression: LPARENT type_expression RPARENT . LPARENT simple_expression RPARENT
+
+    LPARENT  shift, and go to state 155
+
+
+state 130
+
+   92 variable_declaration_statement: CONST type_expression declarator_list . SEMI
+   97 declarator_list: declarator_list . COMMA declarator
+
+    COMMA  shift, and go to state 132
+    SEMI   shift, and go to state 156
+
+
+state 131
+
+   95 declarator: IDENTIFY ASSIGN . expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 95
+    calc_expression       go to state 96
+    expression            go to state 157
+
+
+state 132
+
+   97 declarator_list: declarator_list COMMA . declarator
+
+    IDENTIFY  shift, and go to state 106
+
+    declarator  go to state 158
+
+
+state 133
+
+   93 variable_declaration_statement: type_expression declarator_list SEMI .
+
+    $default  reduce using rule 93 (variable_declaration_statement)
+
+
+state 134
+
+   45 call_expression: call_expression DOT CLASS .
+
+    $default  reduce using rule 45 (call_expression)
+
+
+state 135
+
+   44 call_expression: call_expression DOT IDENTIFY .
+
+    $default  reduce using rule 44 (call_expression)
+
+
+state 136
+
+   43 call_expression: call_expression LPARENT RPARENT .
+
+    $default  reduce using rule 43 (call_expression)
+
+
+state 137
+
+   32 type_expression: type_expression . TRIPLE_DOT
+   33                | type_expression . LBRACKET RBRACKET
+   34                | type_expression . LBRACKET type_expression_list RBRACKET
+   35                | type_expression . DOT IDENTIFY
+   38 construct_expression: type_expression .
+
+    TRIPLE_DOT  shift, and go to state 53
+    DOT         shift, and go to state 54
+    LBRACKET    shift, and go to state 55
+
+    DOT       [reduce using rule 38 (construct_expression)]
+    $default  reduce using rule 38 (construct_expression)
+
+
+state 138
+
+   42 call_expression: call_expression LPARENT expression_list . RPARENT
+   64 expression_list: expression_list . COMMA expression
+
+    COMMA    shift, and go to state 159
+    RPARENT  shift, and go to state 160
+
+
+state 139
+
+   63 expression_list: expression .
+
+    $default  reduce using rule 63 (expression_list)
+
+
+state 140
+
+   50 calc_expression: calc_expression PLUS simple_expression .
+
+    $default  reduce using rule 50 (calc_expression)
+
+
+state 141
+
+   51 calc_expression: calc_expression MINUS simple_expression .
+
+    $default  reduce using rule 51 (calc_expression)
+
+
+state 142
+
+   54 calc_expression: calc_expression MOD simple_expression .
+
+    $default  reduce using rule 54 (calc_expression)
+
+
+state 143
+
+   55 calc_expression: calc_expression TRANS simple_expression .
+
+    $default  reduce using rule 55 (calc_expression)
+
+
+state 144
+
+   53 calc_expression: calc_expression DIV simple_expression .
+
+    $default  reduce using rule 53 (calc_expression)
+
+
+state 145
+
+   52 calc_expression: calc_expression MULTI simple_expression .
+
+    $default  reduce using rule 52 (calc_expression)
+
+
+state 146
+
+   61 calc_expression: calc_expression NOT_EQ simple_expression .
+
+    $default  reduce using rule 61 (calc_expression)
+
+
+state 147
+
+   59 calc_expression: calc_expression SMALLER_EQ simple_expression .
+
+    $default  reduce using rule 59 (calc_expression)
+
+
+state 148
+
+   58 calc_expression: calc_expression BIGGER_EQ simple_expression .
+
+    $default  reduce using rule 58 (calc_expression)
+
+
+state 149
+
+   62 calc_expression: calc_expression ASSIGN simple_expression .
+
+    $default  reduce using rule 62 (calc_expression)
+
+
+state 150
+
+   60 calc_expression: calc_expression EQUALS simple_expression .
+
+    $default  reduce using rule 60 (calc_expression)
+
+
+state 151
+
+   57 calc_expression: calc_expression SMALLER simple_expression .
+
+    $default  reduce using rule 57 (calc_expression)
+
+
+state 152
+
+   56 calc_expression: calc_expression BIGGER simple_expression .
+
+    $default  reduce using rule 56 (calc_expression)
+
+
+state 153
+
+   39 construct_expression: NEW type_expression LPARENT RPARENT .
+
+    $default  reduce using rule 39 (construct_expression)
+
+
+state 154
+
+   40 construct_expression: NEW type_expression LPARENT expression_list . RPARENT
+   64 expression_list: expression_list . COMMA expression
+
+    COMMA    shift, and go to state 159
+    RPARENT  shift, and go to state 161
+
+
+state 155
+
+   48 simple_expression: LPARENT type_expression RPARENT LPARENT . simple_expression RPARENT
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 162
+
+
+state 156
+
+   92 variable_declaration_statement: CONST type_expression declarator_list SEMI .
+
+    $default  reduce using rule 92 (variable_declaration_statement)
+
+
+state 157
+
+   95 declarator: IDENTIFY ASSIGN expression .
+
+    $default  reduce using rule 95 (declarator)
+
+
+state 158
+
+   97 declarator_list: declarator_list COMMA declarator .
+
+    $default  reduce using rule 97 (declarator_list)
+
+
+state 159
+
+   64 expression_list: expression_list COMMA . expression
+
+    BOOL_IVAL    shift, and go to state 78
+    CHAR_IVAL    shift, and go to state 79
+    BYTE_IVAL    shift, and go to state 80
+    SHORT_IVAL   shift, and go to state 81
+    INT_IVAL     shift, and go to state 82
+    LONG_IVAL    shift, and go to state 83
+    FLOAT_IVAL   shift, and go to state 84
+    DOUBLE_IVAL  shift, and go to state 85
+    STRING_IVAL  shift, and go to state 86
+    VOID         shift, and go to state 39
+    BOOL         shift, and go to state 40
+    CHAR         shift, and go to state 41
+    BYTE         shift, and go to state 42
+    SHORT        shift, and go to state 43
+    INT          shift, and go to state 44
+    LONG         shift, and go to state 45
+    FLOAT        shift, and go to state 46
+    DOUBLE       shift, and go to state 47
+    NEW          shift, and go to state 87
+    LPARENT      shift, and go to state 88
+    IDENTIFY     shift, and go to state 48
+
+    ival                  go to state 91
+    basic_type            go to state 49
+    type_expression       go to state 137
+    construct_expression  go to state 93
+    call_expression       go to state 94
+    simple_expression     go to state 95
+    calc_expression       go to state 96
+    expression            go to state 163
+
+
+state 160
+
+   42 call_expression: call_expression LPARENT expression_list RPARENT .
+
+    $default  reduce using rule 42 (call_expression)
+
+
+state 161
+
+   40 construct_expression: NEW type_expression LPARENT expression_list RPARENT .
+
+    $default  reduce using rule 40 (construct_expression)
+
+
+state 162
+
+   48 simple_expression: LPARENT type_expression RPARENT LPARENT simple_expression . RPARENT
+
+    RPARENT  shift, and go to state 164
+
+
+state 163
+
+   64 expression_list: expression_list COMMA expression .
+
+    $default  reduce using rule 64 (expression_list)
+
+
+state 164
+
+   48 simple_expression: LPARENT type_expression RPARENT LPARENT simple_expression RPARENT .
+
+    $default  reduce using rule 48 (simple_expression)

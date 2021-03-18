@@ -1,0 +1,7 @@
+package wiki.chuanwise;
+
+public class DemoClass {
+    public static void main(String... args) {
+        "Hello World" => SHOWED;
+    }
+}

@@ -15,3 +15,15 @@
 1. 状态转移语句：`object.propertyName => STATE`。<br>
 例如 `student.homework => FINISHED`，表示通过一系列的函数，将对象 `student` 的属性 `homework` 的状态转移为 `FINISHED`。<br>
 这条语句相当于直接调用 `student.finishHomework()`。
+
+## Demo
+1. `Hello World`
+```wise
+package wiki.chuanwise;
+
+public class HelloWorld {
+    public static void main(String... args) {
+        "Hello World!" => SHOWED;
+    }
+}
+```

@@ -15,8 +15,61 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="wisec.cpp">
+    <ClCompile Include="compiler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="consolecolor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="information.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="grammaranalysiser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="classfile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lex.yy.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="codegarmmar.tab.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\program\GnuWin32\include\unistd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="compiler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="consolecolor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="information.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="grammaranalysiser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="macros.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="classfile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="codegarmmar.tab.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

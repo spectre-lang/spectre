@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -90,6 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\useful small software\GnuWin32\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\useful small software\GnuWin32\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,7 +149,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="wisec.cpp" />
+    <ClCompile Include="classfile.cpp" />
+    <ClCompile Include="codegarmmar.tab.cpp" />
+    <ClCompile Include="compiler.cpp" />
+    <ClCompile Include="consolecolor.cpp" />
+    <ClCompile Include="grammaranalysiser.cpp" />
+    <ClCompile Include="information.cpp" />
+    <ClCompile Include="lex.yy.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="classfile.h" />
+    <ClInclude Include="codegarmmar.tab.h" />
+    <ClInclude Include="compiler.h" />
+    <ClInclude Include="consolecolor.h" />
+    <ClInclude Include="D:\program\GnuWin32\include\unistd.h" />
+    <ClInclude Include="grammaranalysiser.h" />
+    <ClInclude Include="information.h" />
+    <ClInclude Include="macros.h" />
+    <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

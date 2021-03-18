@@ -1,0 +1,34 @@
+public class DemoClass {
+    public static void main() {
+        int c = 0;
+        ($"Hello World! your variable = {c}") => SHOWED;
+        "Hello World!" => SHOWED;
+    }
+}
+
+property SortAble[? is Comparable] {
+    state IsSorted {
+        SORTED = isSorted(),
+        UNSORTED = isUnsorted,
+    }
+}
+
+class String 
+is SortAble, Comparable {
+}
+
+
+property ShowAble<ConvertTo[String]> {
+    public state ShowProperty {
+        UNSHOWED = true,
+        SHOWED = false;
+    }
+
+    public ShowProperty show;
+
+    Override!
+    
+    public void showInConsole<show: UNSHOWED>() {
+        Console.println(toString());
+    }
+}
