@@ -1,6 +1,6 @@
-# The Sunrise Programming Language
+# The Spectre Programming Language
 
-This is the main repository for Sunrise. It contains documentations, plans and logs.
+This is the main repository for Spectre. It contains documentations, plans and logs.
 
 The name comes from the first sentence of `Manifesto of the Communist Party`: `A spectre is haunting Europe – the spectre of communism`.
 
