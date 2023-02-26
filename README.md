@@ -36,9 +36,10 @@ Or you can use `condition`. `Type{condition}` is a type of values match the cond
 
 ```spectre
 var int: Int{!=0} = 0
+// Compilation error: int is Int{!=0}, but initial value is `0`
 ```
 
-which is equality to the previous example.
+Which is equality to the previous example.
 
 Spectre will check if the divide number is zero. Codes can not be compiled successfully as such:
 
