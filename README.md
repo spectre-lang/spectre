@@ -1,79 +1,56 @@
-# The Spectre Programming Language
+# Spectre 编程语言
 
-This is the main repository for Spectre. It contains documentations, plans and logs.
+这是 `Spectre` 编程语言得主仓库，主要包含编译器、文档和开发计划。
 
-The name comes from the first sentence of `Manifesto of the Communist Party`: `A spectre is haunting Europe – the spectre of communism`.
+`Spectre` **幽灵**是这款编程语言的暂定名，来源于《共产党宣言》的第一句话：「一个**幽灵**，共产主义的**幽灵**，在欧洲游荡」。
 
-We're planing all the details of Sunrise. Some results are as follows:
+这款语言应该具备以下特性：
 
-## Features
+* 编译型语言。
+* 代码跨平台。
+* 支持面向对象的程序设计。
+* 支持反射。
+* 具备异常。
+* 空安全。
+* 所有权和生命周期。
 
-### Null safety
+## 走马观花
 
-`Type?`, a nullable type, can be pointed to `null`. 
+下面**可能**是用 `Spectre` 编写的 Hello World 程序：
 
 ```spectre
-val int: Int? = null
+fun main(args: Array<String>) = println("Hello World!")
 ```
 
-A program can not be compiled successfully as such:
+## 特性
+
+我们正在设计 `Spectre` 语言的草案，下面是一些以往编程语言中令人着迷的特性，我们正在考虑将哪些特性添加进 `Spectre` 中。
+
+### 空安全
+
+`Type?` 是一个可以指向 `null` 的指针，而 `Type` 是不允许指向 `null` 的指针。
 
 ```spectre
-val int: Int = null
-// Compilation error: int is a non-null reference, can not be pointed to `null`
+// 下面的语句定义一个可以为 `null` 的整型数字
+val i1: Int? = null
+
+// 下面的代码将会编译错误，因为使用 `null` 初始化不可为 `null` 的类型
+val i2: Int = null
 ```
 
-### Zero safety
+### 类型条件
 
-In order to prevent from dividing by zero, spectre makes `Type$` as a type of values can be set to `0`.
-
-```spectre
-val int = 0
-// int is `Int$`
-```
-
-Or you can use `condition`. `Type{condition}` is a type of values match the condition. 
+运用 `Type{condition}` 可以声明一个满足某条件的类型。例如，`Int{!=0}` 是一个取值非 `0` 的整型数字。
 
 ```spectre
+// 下面的代码将会编译错误，因为 `int` 不能为 `0`
 val int: Int{!=0} = 0
-// Compilation error: int is `Int{!=0}`, but initial value is `0`
 ```
 
-Which is equality to the previous example.
-
-Spectre will check if the divide number is zero. Codes can not be compiled successfully as such:
+这些条件未必是编译期能验证的条件。例如，`spectre.lang.List` 中有一个方法 `get`：
 
 ```spectre
-val i0 = 1
-// i0 is Int{=1}
-
-val i1 = i0 - 1
-// i1 is Int{=0}
-
-val i2 = 5 / i1
-// Compilation error: i1 is Int{=0}
+operator fun get(index: Int{>=0, <size}) = data[index]
 ```
 
-### Reflection
-
-`T.type` is an object `Type<T>` represents itself. 
-
-```spectre
-println(Int.type.name)
-// prints `spectre.lang.Int`
-```
-
-In addition, `obj.type` is an object represents the actual type of `obj`.
-
-```spectre
-val i = 6
-// i is Int{=6}
-
-val type = i.type
-// type is `Type<Int>`
-
-if (type is Data<Int>) {
-    // type is Data<Int> because of smart cast
-    type.set(8)
-}
-```
+`size` 属性不一定是编译时能确定的，但依旧可以写入类型条件。编译器如果不确定，将会在合适的时候插入断言。
