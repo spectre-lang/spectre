@@ -44,13 +44,13 @@ val i2: Int = null
 
 ```spectre
 // 下面的代码将会编译错误，因为 `int` 不能为 `0`
-val int: Int{!=0} = 0
+val int: Int{? != 0} = 0
 ```
 
 这些条件未必是编译期能验证的条件。例如，`spectre.lang.List` 中有一个方法 `get`：
 
 ```spectre
-operator fun get(index: Int{>=0, <size}) = data[index]
+operator fun get(index: Int{? >= 0 && ? < length}) = data[index]
 ```
 
 `size` 属性不一定是编译时能确定的，但依旧可以写入类型条件。编译器如果不确定，将会在合适的时候插入断言。
