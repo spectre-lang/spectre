@@ -40,7 +40,9 @@ val i2: Int = null
 
 ### 类型条件
 
-运用 `Type{condition}` 可以声明一个满足某条件的类型。例如，`Int{!=0}` 是一个取值非 `0` 的整型数字。
+运用 `Type{condition}` 可以声明一个满足某条件的类型。例如，`Int{? != 0}` 是一个取值非 `0` 的整型数字。
+
+如果不加 `{condition}`，则默认是所有可能的取值。例如，`Int` 等价于 `Int{Int.MIN <= ? <= Int.MAX}`
 
 ```spectre
 // 下面的代码将会编译错误，因为 `int` 不能为 `0`
@@ -50,7 +52,24 @@ val int: Int{? != 0} = 0
 这些条件未必是编译期能验证的条件。例如，`spectre.lang.List` 中有一个方法 `get`：
 
 ```spectre
-operator fun get(index: Int{? >= 0 && ? < length}) = data[index]
+operator fun get(index: Int{0 <= ? < length}) = data[index]
 ```
 
 `size` 属性不一定是编译时能确定的，但依旧可以写入类型条件。编译器如果不确定，将会在合适的时候插入断言。
+
+类型条件可以实现零安全，以避免除零错误：
+
+```spectre
+// zero 的类型是 Int{? = 0}
+val zero = 0
+
+// 下面的语句将编译错误，因为 zero 的取值为 0
+val res1 = 5 / zero
+
+// random 的类型是 Int，即 Int{Int.MIN <= ? <= Int.MAX}
+// res2 的语句将编译错误，因为 zero 的可能取值为 0
+// res3 的语句将编译成功，编译器将会在此之前插入断言
+val random = Random().nextInt()
+val res2 = 5 / random
+val res3 = 5 / random!!
+```
