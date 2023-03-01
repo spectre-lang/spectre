@@ -1,6 +1,6 @@
 # Spectre 编程语言
 
-这是 `Spectre` 编程语言得主仓库，主要包含编译器、文档和开发计划。
+这是 `Spectre` 编程语言的主仓库，主要包含编译器、文档和开发计划。
 
 `Spectre` **幽灵**是这款编程语言的暂定名，来源于《共产党宣言》的第一句话：「一个**幽灵**，共产主义的**幽灵**，在欧洲游荡」。
 
@@ -40,7 +40,7 @@ public fun main(args: Array<String>) {
 
     val json = Json()
     val student = Student("Spectre", 0)
-    val string = json.serialize(student)
+    val string = json.serialize(student, Student::class)
 
     println(string)
 }
