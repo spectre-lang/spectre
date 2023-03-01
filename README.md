@@ -73,3 +73,59 @@ val random = Random().nextInt()
 val res2 = 5 / random
 val res3 = 5 / random!!
 ```
+
+满足条件的类型是可以协变的。例如，`Int{? != 0}` 的引用可以接受 `Int{? > 0}` 的值：
+
+```spectre
+val int: Int{? != 0} = (Int{? > 0}) 3
+```
+
+类型条件中使用 `?` 指代当前值，该值非空的，因此 `? == null` 不可能成立，也不会编译通过：
+
+```spectre
+// 编译错误：? 是 Int 类型，不可能为 null
+val int: Int{? == null || ? != null} = null
+```
+
+### 只读和读写引用
+
+`Type&` 是一个读写引用，例如：
+
+```spectre
+// 下面的代码定义了一个读写引用
+val m1: Map<String, String>& = HashMap<>()
+m1["key"] = "value"
+
+// 下面的代码定义了一个只读引用，immutable 只能用于读取对象
+// 因此下面的代码会编译错误
+val i1 = HashMap<String, String>()
+i1["key"] = "value"
+```
+
+可变引用可以绑定在不可变引用上。例如：
+
+```spectre
+val m2: List<String>& = ArrayList<String>()
+val i2: List<String> = m2
+```
+
+引用可以借用和出让。
+
+#### 借用
+
+使用 `&obj` 可以借用一个对象。例如：
+
+```spectre
+val s1 = "Hello HirakiLan"
+val b1: String* = &s1
+```
+
+例如下面的代码：
+
+```spectre
+fun longer(s1: String*, s2: String*) = if (s1.length > s2.length) {
+    s1
+} else {
+    s2
+}
+```
