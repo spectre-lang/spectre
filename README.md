@@ -16,10 +16,53 @@
 
 ## 走马观花
 
-下面**可能**是用 `Spectre` 编写的 Hello World 程序：
+### Hello Spectre
 
 ```spectre
-fun main(args: Array<String>) = println("Hello World!")
+fun main(args: Array<String>) = println("Hello Spectre!")
+```
+
+程序将输出：
+
+```
+Hello Spectre
+```
+
+### Json 序列化
+
+```spectre
+struct Student {
+    val name: String
+    val age: Int
+}
+
+public fun main(args: Array<String>) {
+
+    val json = Json()
+    val student = Student("Spectre", 0)
+    val string = json.serialize(student)
+
+    println(string)
+}
+```
+
+程序将输出：
+
+```json
+{
+    "name" : "Spectre",
+    "age" : 0
+}
+```
+
+### A + B
+
+```spectre
+public fun main(args: Array<String>) {
+    handle (scanner = Scanner(system.in)) {
+        println("a + b == ${scanner.nextInt() + scanner.nextInt()}")
+    }
+}
 ```
 
 ## 特性
@@ -49,7 +92,7 @@ val i2: Int = null
 val int: Int{? != 0} = 0
 ```
 
-这些条件未必是编译期能验证的条件。例如，`spectre.lang.List` 中有一个方法 `get`：
+这些条件未必是编译期能验证的条件。例如，`spectre.collection.List` 中有一个方法 `get`：
 
 ```spectre
 operator fun get(index: Int{0 <= ? < length}) = data[index]
@@ -74,17 +117,37 @@ val res2 = 5 / random
 val res3 = 5 / random!!
 ```
 
-满足条件的类型是可以协变的。例如，`Int{? != 0}` 的引用可以接受 `Int{? > 0}` 的值：
+满足条件的类型可以协变。例如，`Int{? != 0}` 的引用可以接受 `Int{? > 0}` 的值：
 
 ```spectre
 val int: Int{? != 0} = (Int{? > 0}) 3
 ```
 
-类型条件中使用 `?` 指代当前值，该值非空的，因此 `? == null` 不可能成立，也不会编译通过：
+类型条件中使用 `?` 指代当前值，该值非空，因此 `? == null` 不可能成立，也不会编译通过。
+
+### 解包
+
+函数可以返回多个值。多返回值可以解包或转化为 `Tuple<...>`：
 
 ```spectre
-// 编译错误：? 是 Int 类型，不可能为 null
-val int: Int{? == null || ? != null} = null
+fun example() : (String, Int) = "Spectre", 1
+
+val (string, int) = example()
+```
+
+具备 `component` 运算符的类也可以解包。例如：
+
+```spectre
+class Example {
+    operator fun component() : (String, Int) = "Spectre", 1
+}
+```
+
+于是我们可以
+
+```spectre
+val example = Example()
+val (string, int) = example
 ```
 
 ### 只读和读写引用
@@ -93,13 +156,11 @@ val int: Int{? == null || ? != null} = null
 
 ```spectre
 // 下面的代码定义了一个读写引用
-val m1: Map<String, String>& = HashMap<>()
-m1["key"] = "value"
+// i 是 Int
+var i = 1
 
-// 下面的代码定义了一个只读引用，immutable 只能用于读取对象
-// 因此下面的代码会编译错误
-val i1 = HashMap<String, String>()
-i1["key"] = "value"
+// ref 是 Int&
+val ref = &i
 ```
 
 可变引用可以绑定在不可变引用上。例如：
@@ -107,25 +168,13 @@ i1["key"] = "value"
 ```spectre
 val m2: List<String>& = ArrayList<String>()
 val i2: List<String> = m2
+
+// 下面的代码将成功执行，因为 m2 是读写引用
+m2.add("New String")
+
+// 下面的代码将编译错误，因为 i2 是只读引用
+i2.add("New String")
 ```
 
-引用可以借用和出让。
+### 出让和借用
 
-#### 借用
-
-使用 `&obj` 可以借用一个对象。例如：
-
-```spectre
-val s1 = "Hello HirakiLan"
-val b1: String* = &s1
-```
-
-例如下面的代码：
-
-```spectre
-fun longer(s1: String*, s2: String*) = if (s1.length > s2.length) {
-    s1
-} else {
-    s2
-}
-```
