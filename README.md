@@ -28,9 +28,13 @@ fun main(args: Array<String>) = println("Hello Spectre!")
 Hello Spectre
 ```
 
-### Json 序列化
+### Json
+
+#### 序列化
 
 ```spectre
+import Json from spectre.serialization.json
+
 struct Student {
     val name: String
     val age: Int
@@ -40,9 +44,9 @@ public fun main(args: Array<String>) {
 
     val json = Json()
     val student = Student("Spectre", 0)
-    val string = json.serialize(student, Student::class)
+    val serialize = json.serialize(student)
 
-    println(string)
+    println(serialize)
 }
 ```
 
@@ -53,6 +57,33 @@ public fun main(args: Array<String>) {
     "name" : "Spectre",
     "age" : 0
 }
+```
+
+#### 反序列化
+
+```spectre
+import Json from spectre.serialization.json
+
+public fun main(args: Array<String>) {
+
+    val json = Json()
+    val string = """
+        {
+            "name" : "Spectre",
+            "age" : 0
+        }
+    """.trimIndent()
+    
+    val deserialize = json.deserialize(string, Student::class)
+
+    println(deserialize)
+}
+```
+
+程序将输出：
+
+```
+Student("Spectre", 0)
 ```
 
 ### A + B
